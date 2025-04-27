@@ -4,8 +4,8 @@ import { getRandomYear, getRandomPosition } from './random';
 import { Song } from '../types/song';
 
 // Change values here to get specific songs, otherwise leave as undefined
-const YEAR = "2019";
-const POSITION = 14;
+const YEAR = undefined;
+const POSITION = undefined;
 
 function capitalizeWords(str: string) {
   return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -46,10 +46,9 @@ const parseTableRowInfo = (
     return searchTerms.some(term => text.includes(term));
   });
   if (!row.length) return '';
-  // Remove citation/reference tags
-  row.find('sup.reference').remove();
+  row.find('sup.reference').remove(); // Remove citation/reference tags
 
-  let text = row.text().trim().toLowerCase();
+  let text = '';
   if (useHrefTag) {
     const links = row.find('a');
     const linkTitles = links.map((_, el) => $(el).text().trim()).get();
@@ -59,9 +58,18 @@ const parseTableRowInfo = (
     return text;
   }
 
+  // Check for ul list first
+  const ul = row.find('ul');
+  if (ul.length) {
+    const items = ul.find('li').map((_, el) => $(el).text().trim()).get();
+    text = items.join(', ');
+  } else {
+    text = row.text().trim().toLowerCase();
+  }
+
   for (const term of searchTerms) {
     if (text.includes(term)) {
-      text = capitalizeWords(text.split(term)[1].trim().replace(/\s+/g, ' '));
+      text = text.split(term)[1].trim().replace(/\s+/g, ' ');
       break;
     }
   }
@@ -70,8 +78,7 @@ const parseTableRowInfo = (
     text = text.slice(3).trim();
   }
 
-  return text;
-
+  return capitalizeWords(text);
 };
 
 const parseInfobox = (
