@@ -1,10 +1,10 @@
 import seedrandom from 'seedrandom';
 
-export const getDailySeed = (): number => {  
-    const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const rng = seedrandom(today);
-    return rng(); // Generate a random number
-}
+export const getDailySeed = (givenDate?: string): number => {
+  const today = givenDate ?? new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const rng = seedrandom(today);
+  return rng(); // Generate a random number
+};
 
 export const getRandomYear = (): string => {
   const years = Array.from({ length: 15 }, (_, i) => (2010 + i).toString());

@@ -1,11 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { getDailySeed } from './utils/utils';
+// import { getRandomYear, getRandomPosition } from './utils/utils';
+import { WikipediaAPI } from './api/WikipediaAPI';
+
 function App() {
   const [count, setCount] = useState(0);
-  console.log(getDailySeed());
+  const [song, setSong] = useState<{ song: string; artist: string; year: string } | null>(null);
+
+  useEffect(() => {
+    const fetchSong = async () => {
+      try {
+        const result = await WikipediaAPI.getSong();
+        console.log(result);
+        setSong(result);
+      } catch (error) {
+        console.error('Error fetching song:', error);
+      }
+    };
+    fetchSong();
+  }, []);
 
   return (
     <>
@@ -22,9 +37,13 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        {song && (
+          <div>
+            <p>Song: {song.song}</p>
+            <p>Artist: {song.artist}</p>
+            <p>Year: {song.year}</p>
+          </div>
+        )}
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
