@@ -1,5 +1,5 @@
 import seedrandom from 'seedrandom';
-import { getDailySeed } from '../utils/utils';
+import { getDailySeed } from '../utils/random';
 
 describe('Utils', () => {
   it('should return the same seed for the same day', () => {

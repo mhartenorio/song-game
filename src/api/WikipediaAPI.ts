@@ -1,6 +1,4 @@
 import axios from 'axios';
-import * as cheerio from 'cheerio';
-import { getRandomYear, getRandomPosition } from '../utils/utils';
 
 export const WikipediaAPI = {
   async getSong() {
