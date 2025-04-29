@@ -2,7 +2,7 @@ import seedrandom from 'seedrandom';
 
 export const getDailySeed = (givenDate?: string): number => {
   const today = givenDate ?? new Date().toISOString().slice(0, 10).replace(/-/g, '');
-  const rng = seedrandom();
+  const rng = seedrandom(today);
   return rng(); // Generate a random number
 };
 
