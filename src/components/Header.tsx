@@ -9,7 +9,7 @@ export const Header = () => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingTop: '1rem'
+          // paddingTop: '1rem'
         }}>
         <div>
           <Typography
