@@ -1,39 +1,18 @@
-import { useState, useEffect } from 'react'
 import './App.css'
-import { WikipediaAPI } from './api/WikipediaAPI';
+import { Container } from '@mui/material';
+import { Header } from './components/Header';
+import { MusicBox } from './components/MusicBox';
+import { useFetchSong } from './hooks/useFetchSong';
 
 function App() {
-  const [song, setSong] = useState<{ title: string; artist: string; year: string } | null>(null);
-
-  useEffect(() => {
-    const fetchSong = async () => {
-      try {
-        const result = await WikipediaAPI.getSong();
-        console.log(result);
-        setSong(result);
-      } catch (error) {
-        console.error('Error fetching song:', error);
-      }
-    };
-    fetchSong();
-  }, []);
+  const { song } = useFetchSong();
 
   return (
-    <>
-      <h1>WikiSong</h1>
-      <div className="card">
-        {song && (
-          <div>
-            <p>Song: {song.title}</p>
-            <p>Artist: {song.artist}</p>
-            <p>Year: {song.year}</p>
-          </div>
-        )}
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Container maxWidth="xs" sx={{ width: '100vw', height: '100vh' }} disableGutters>
+      <Header />
+      {song && <MusicBox song={song} guessNumber={0} hasSolved={false} />}
+    </Container>
+
   )
 }
 
