@@ -1,8 +1,27 @@
-import { Box, TextField, Button, Paper } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { colors } from "../theme/colors";
 import { ChevronRightRounded } from "@mui/icons-material";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Song } from "../types/song";
+import { checkAnswer } from "../utils/checkAnswer";
 
-export const SearchBar = () => {
+type SearchBarProps = {
+  setGuessNumber: Dispatch<SetStateAction<number>>,
+  setHasSolved: Dispatch<SetStateAction<boolean>>,
+  song: Song;
+};
+
+export const SearchBar = ({ setGuessNumber, setHasSolved, song }: SearchBarProps) => {
+  const [userGuess, setUserGuess] = useState('');
+
+  const handleSubmit = () => {
+    if (checkAnswer(userGuess, song)) {
+      setHasSolved(true);
+    } else {
+      setGuessNumber((prevGuessNumber) => prevGuessNumber + 1);
+    }
+  }
+
   return (
     <div
       style={{
@@ -34,6 +53,11 @@ export const SearchBar = () => {
             WebkitTextFillColor: colors.red,
             fontSize: '16px',
           }}
+          onChange={(e) => setUserGuess(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter")
+              handleSubmit();
+          }}
         />
 
         <Button
@@ -47,6 +71,7 @@ export const SearchBar = () => {
               backgroundColor: '#d62f00',
             }
           }}
+          onClick={handleSubmit}
         >
           <ChevronRightRounded fontSize="large" fontWeight="bold" />
         </Button>
